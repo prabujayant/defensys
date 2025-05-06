@@ -1,0 +1,36 @@
+version: '3'
+services:
+  node1:
+    build: .
+    networks:
+      - my_network
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  node2:
+    build: .
+    networks:
+      - my_network
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  node3:
+    build: .
+    networks:
+      - my_network
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  parent:
+    build: .
+    networks:
+      - my_network
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python parent_script.py
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  
+
+networks:
+  my_network:
+    driver: bridge

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DEFENsys: Traffic Control Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --primary: #8b5cf6;
+      --primary-hover: #7c3aed;
+      --bg: #13111c;
+      --panel: #1a1825;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: var(--panel);
+      padding: 2.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+      width: 92%;
+      max-width: 540px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      margin-bottom: 2rem;
+      font-weight: 600;
+    }
+
+    .buttons {
+      display: grid;
+      gap: 1rem;
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.2rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.25s ease-in-out;
+    }
+
+    button:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+
+    .status-message {
+      margin-top: 1.8rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      transition: all 0.2s ease;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 1.2rem;
+      right: 1.5rem;
+      background-color: var(--panel);
+      color: var(--text);
+      padding: 1rem 1.4rem;
+      border-left: 4px solid var(--primary);
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      font-size: 0.85rem;
+      animation: fadein 0.3s ease, fadeout 0.3s 2.7s ease;
+    }
+
+    @keyframes fadein {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeout {
+      to {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><i data-lucide="shield-plus" style="width: 28px; vertical-align: middle;"></i> DEFENsys Control Panel</h1>
+
+    <div class="buttons">
+      <button onclick="sendRequest('/setup-container')"><i data-lucide="package-plus"></i> Setup Container & Install hping3</button>
+      <button onclick="sendRequest('/run-hping3', 'docker-node1-1')"><i data-lucide="activity"></i> Inject Traffic on Node 1</button>
+      <button onclick="sendRequest('/run-hping3', 'docker-node2-1')"><i data-lucide="activity"></i> Inject Traffic on Node 2</button>
+      <button onclick="sendRequest('/run-hping3', 'docker-node3-1')"><i data-lucide="activity"></i> Inject Traffic on Node 3</button>
+      <button onclick="sendRequest('/stop-hping3', 'docker-node1-1')"><i data-lucide="x-octagon"></i> Stop Injection on Node 1</button>
+      <button onclick="sendRequest('/stop-hping3', 'docker-node2-1')"><i data-lucide="x-octagon"></i> Stop Injection on Node 2</button>
+      <button onclick="sendRequest('/stop-hping3', 'docker-node3-1')"><i data-lucide="x-octagon"></i> Stop Injection on Node 3</button>
+    </div>
+
+    <div class="status-message" id="status"></div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    async function sendRequest(endpoint, node = null) {
+      const statusEl = document.getElementById("status");
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ node })
+        });
+        const data = await response.json();
+        statusEl.innerText = data.message;
+        showToast(data.message);
+      } catch (error) {
+        const msg = '⚠️ Error: Could not process request.';
+        statusEl.innerText = msg;
+        showToast(msg);
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerText = message;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
