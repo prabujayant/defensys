@@ -22,14 +22,14 @@ Whether you're stress-testing your NIDS or classifying suspicious binaries as ma
 
 ## 🖼️ Architecture
 
-+-------------+ +-------------------+ +--------------------------+
-| Frontend | <----> | Flask App | <----> | TensorFlow DL Models |
-+-------------+ +-------------------+ +--------------------------+
-        ^             |                     |
-        |             |                     |
-        |             v                     v
-Container Management    Docker CLI        Malware Image Preprocessing
-(hping3 Attacks)       (ResNet / CNN Classification)
++-----------------+     +-------------------+     +--------------------------+
+|     Frontend    | <---> |     Flask App     | <---> |  TensorFlow DL Models  |
++-----------------+     +-------------------+     +--------------------------+
+                             |                           |
+                             |                           |
+                             v                           v
+                  Container Management       Malware Image Preprocessing
+                  (hping3 Attacks)          (ResNet / CNN Classification)
 
 ## ⚙️ Tech Stack
 
