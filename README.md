@@ -55,4 +55,50 @@ Container Management    Docker CLI        Malware Image Preprocessing
 * Python 3.8+
 * `virtualenv` recommended
 
+
+## 🧠 AI Models Used
+
+* **Binary Classifier** – CNN-based binary classifier (malicious vs benign)
+* **Multiclass Classifier** – Classifies 25 malware families into categories like Trojan, Worm, Ransomware, etc.
+Both models are trained on grayscale image representations of malware binaries.
+
+## 📂 API Endpoints
+
+### Attack Control
+
+* **POST /setup-container** – Initializes the Docker container
+* **POST /run-hping3** – Launches a SYN flood to a specified IP
+* **POST /stop-hping3** – Stops attack on a given IP
+* **GET /status** – Returns current container and attack status
+
+### Malware Detection
+
+* **POST /predict** – Upload a malware binary image and get prediction
+* **GET /uploads/<filename>** – Access uploaded image (auto-deleted after inference)
+
 ### 🖥️ Setup
+
+git clone https://github.com/prabujayant/DefenSys.git
+cd DefenSys
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+pip install -r requirements.txt
+python app.py
+
+**Model Placement**
+
+models/
+├── binary_model_best.keras
+└── multi_model_best.keras
+
+## 🔐 Sample Malware Categories
+
+| Malware Family | Category    |
+|----------------|-------------|
+| Allaple.A      | Worm        |
+| Fakerean       | Ransomware  |
+| Yuner.A        | Downloader  |
+| C2LOP.P        | Adware      |
+| Rbot!gen       | Botnet      |
+| Lolyda.AA3     | Backdoor    |
+| VB.AT          | Virus       |
