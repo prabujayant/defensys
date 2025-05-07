@@ -22,14 +22,15 @@ Whether you're stress-testing your NIDS or classifying suspicious binaries as ma
 
 ## 🖼️ Architecture
 
-+-----------------+     +-------------------+     +--------------------------+
-|     Frontend    | <---> |     Flask App     | <---> |  TensorFlow DL Models  |
-+-----------------+     +-------------------+     +--------------------------+
-                             |                           |
-                             |                           |
-                             v                           v
-                  Container Management       Malware Image Preprocessing
-                  (hping3 Attacks)          (ResNet / CNN Classification)
+The DefenSys architecture consists of the following components:
+
+* **Frontend**: User interface for interacting with the system
+* **Flask App**: Backend API that handles requests and responses
+* **TensorFlow DL Models**: Deep learning models for malware classification
+* **Container Management**: Manages Docker containers for attack simulation (hping3 attacks)
+* **Malware Image Preprocessing**: Preprocesses malware images for classification using ResNet/CNN models
+* **3-Node IoT Simulation**: Utilizes Docker containers to simulate 3 IoT nodes for testing and validation
+
 
 ## ⚙️ Tech Stack
 
