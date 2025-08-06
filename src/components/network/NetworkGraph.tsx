@@ -12,7 +12,6 @@ const icons = [icon1, icon2, icon3];
 interface NetworkGraphProps {
   nodes: Node[];
   onNodeClick: (node: Node) => void;
-  onAddNode: () => void;
   onRename: (nodeId: string, newName: string) => void;
   onChangeIcon: (nodeId: string, newIcon: number) => void;
 }
@@ -20,7 +19,6 @@ interface NetworkGraphProps {
 export function NetworkGraph({
   nodes,
   onNodeClick,
-  onAddNode,
   onRename,
   onChangeIcon,
 }: NetworkGraphProps) {
@@ -140,6 +138,10 @@ export function NetworkGraph({
     }
   };
 
+  const handleControlPanel = () => {
+    window.open("http://127.0.0.1:6050/", "_blank");
+  };
+
   useEffect(() => {
     return () => {
       if (cyRef.current) {
@@ -180,10 +182,10 @@ export function NetworkGraph({
           Fit View
         </button>
         <button
-          onClick={onAddNode}
-          className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md shadow transition"
+          onClick={handleControlPanel}
+          className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded-md shadow transition"
         >
-          + Add Node
+          Control Panel
         </button>
       </div>
 

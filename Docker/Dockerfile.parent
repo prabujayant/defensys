@@ -1,0 +1,30 @@
+FROM python:3.11-slim-bookworm
+
+ENV TZ=Asia/Kolkata
+WORKDIR /app
+
+# Copy all necessary files into the container
+COPY . /app
+
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    iputils-ping tzdata curl \
+    build-essential python3-dev gcc \
+    libglib2.0-0 libsm6 libxext6 libxrender-dev && \
+    dpkg-reconfigure --frontend noninteractive tzdata && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install Python packages
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir \
+    flask \
+    redis \
+    requests \
+    tensorflow \
+    pillow && \
+    apt-get purge -y build-essential python3-dev gcc && \
+    apt-get autoremove -y
+
+# Set the default command
+CMD ["python", "parent_script.py"]
